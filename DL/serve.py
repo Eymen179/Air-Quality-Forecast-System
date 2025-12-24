@@ -54,13 +54,12 @@ def process_excel_and_predict(file):
         
         with torch.no_grad():
             pred_scaled = model(input_tensor)
-            
             # Ters ölçekleme
             dummy = np.zeros((1, len(features)))
             dummy[0, 0] = pred_scaled.item()
             prediction = scaler.inverse_transform(dummy)[0, 0]
             
-        return f"Excel Verisine Dayalı Tahmin: {prediction:.2f} ug/m^3"
+        return f"Yüklenen Veriye Göre Tahmin: {prediction:.2f} ug/m^3"
 
     except Exception as e:
         return f"Hata oluştu: {str(e)}"
@@ -70,7 +69,7 @@ interface = gr.Interface(
     fn=process_excel_and_predict,
     inputs=gr.File(label="Excel Dosyasını Yükle (.xlsx veya .xls)", file_types=[".xlsx", ".xls"]),
     outputs=gr.Textbox(label="Model Çıktısı"),
-    title="Hava Kalitesi Tahmin Sistemi (Excel Girişli)",
+    title="Hava Kalitesi Tahmin Sistemi",
     description="Hazırladığınız 24 saatlik veriyi içeren Excel dosyasını yükleyin. "
                 "Dosyanız şu sütunları içermelidir: PM_US Post, DEWP, HUMI, PRES, TEMP, Iws",
 )
